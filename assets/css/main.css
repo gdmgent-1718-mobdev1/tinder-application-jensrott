@@ -1,0 +1,13 @@
+.image_circle {
+    border-radius: 50%;
+}
+
+.like_button {
+    width: 100px;
+    height: 100px;
+}
+
+.next_button {
+    width: 100px;
+    height: 100px;
+}
