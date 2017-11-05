@@ -10,8 +10,9 @@ function App() {
         console.log('1.2 Cache the active DOM-elements');
         _tinderAppElement = document.querySelector('.tinder-container');
         console.log('1.3 Load the parking states via _parkingStatesService object');
+        
         loadTinderAppData();
-    
+        
     }
 
     function loadTinderAppData() {
@@ -19,67 +20,113 @@ function App() {
             .then(function(data) {
                 console.log('2.1 Save the loaded data in _currentParkingStatesData');
                 _currentTinderAppData = data;
-                // Het object
                 console.log(_currentTinderAppData);
                 console.log('2.2 Update parking states user interface');
                 console.log(_currentTinderAppData.results[200].login.username); 
-                console.log(_currentTinderAppData.results[200].login.username);
-                updateTinderAppUI();
-                addToLocalStorage();
-            
+                console.log(_currentTinderAppData.results[random].login.username);
+                createTinderApp();
+                        
             })
             .catch(function(reject) {
                 console.log('Something went wrong!');
             });
     }
 
+    // random tussen 1 en 500
+    let random = Math.floor((Math.random() * 500) + 1);
     let tempStr = '';
+    
 
-    function updateTinderAppUI() {
-       
+    // Wat we kunnen toevoegen als het een vrouw is dan is de achtergrond kleur roze, anders als het een man is blauwachtig
+    function createTinderApp() {
+
+            
+            let userName = _currentTinderAppData.results[random].login.username;
+            let firstName = _currentTinderAppData.results[random].name.first;
+            let lastName = _currentTinderAppData.results[random].name.last;
+            let image = _currentTinderAppData.results[random].picture.large;
+           
+            let gender = _currentTinderAppData.results[random].gender;
+
+            console.log(gender);
+
+            let likedPeople = [];
+            let dislikedPeople = [];
+
+            let layout;
+
+
+            checkGender();
+            
+            function checkGender() {
+                
+            if (gender === "female") {
+                console.log("It's a woman!");
+                layout = "female_class";
+                
+            } else {
+                console.log("It's a male!");
+                layout = "male_class";
+            }  
+        }
+
+        
             
             console.log('3.1 We get the data on the screen!');
 
             tempStr += `
-            <div class="container" style="font-size: 50px;">
-                <h1>Tinder App</h1>
-                <img class="image_circle" src=${_currentTinderAppData.results[200].picture.medium}>
-                <div class="card>
+            <div class="container">
+                <div class=${ layout }>
+                    
+                    <div class="text"> 
+                        <div id="main_title">Tinder App</div>
+                        <div id="username">Username: ${ userName }</div>
+                        <img class="card-img-top image" src=${ image }>
+                        <div id="firstname">Firstname: ${ firstName }</div>
+                        <div id="lastname">Lastname: ${ lastName }</div>
 
-                    <div class="card-block">
-                        
-                        <div class='display-4 firstname'>Firstname: <bold>${_currentTinderAppData.results[200].name.first}</bold></div>
-                        <div class='display-4 lastname'>Lastname: ${_currentTinderAppData.results[200].name.last}</div>
-                        <div class='display-4 username'>Username: ${_currentTinderAppData.results[200].login.username}</div>
-                        
-                        <div class="button-box col-lg-12">
-                            <i class="material-icons like_button">favorite</i>
-                            <i class="material-icons next_button">highlight_off</i>
+                        <div class="buttons">
+                            <button class="like_button">Like</button>
+                            <button class="dislike_button">Dislike</button>
                         </div>
+                        
                     </div>
                 </div>
             </div>
         `;
 
-            _tinderAppElement.innerHTML = tempStr;
         
-    }
 
+            _tinderAppElement.innerHTML = tempStr;
+
+           /* function addLikeToLocalStorage() {
+                console.log("like");
+                likedPeople.push(firstName);
+    
+                console.log(likedPeople);
+                return likedPeople;
+            }
+    
+            function addDislikeToLocalStorage() {
+                console.log("disliked");
+                dislikedPeople.push(firstName);
+                console.log(dislikedPeople);
+                return dislikedPeople;
+            }
+    
+                let like_button = document.querySelector('#like_button');
+                like_button.addEventListener("click", addLikeToLocalStorage, false);
+    
+                let dislike_button = document.querySelector('#dislike_button');
+                dislike_button.addEventListener("click", addDislikeToLocalStorage, false);  */
+    
+}
+
+   
 
     return {
         init: init
     }
-
-    // Nog niet juist
-    let like_button = document.querySelector('.like_button');
-
-    function addToLocalStorage() {
-        
-    }
-
-    like_button.addEventListener("click", reloadPage, false);
-
-
 };
 
 // load event window object
